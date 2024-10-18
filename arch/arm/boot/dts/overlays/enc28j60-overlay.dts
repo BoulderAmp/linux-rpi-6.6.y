@@ -12,6 +12,8 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
+            cs-gpios = <&gpio 8 1>;
+
 			status = "okay";
 
 			eth1: enc28j60@0{
@@ -20,7 +22,7 @@
 				pinctrl-names = "default";
 				pinctrl-0 = <&eth1_pins>;
 				interrupt-parent = <&gpio>;
-				interrupts = <25 0x2>; /* falling edge */
+				interrupts = <13 0x2>; /* falling edge */
 				spi-max-frequency = <12000000>;
 				status = "okay";
 			};
@@ -38,7 +40,7 @@
 		target = <&gpio>;
 		__overlay__ {
 			eth1_pins: eth1_pins {
-				brcm,pins = <25>;
+				brcm,pins = <13>;
 				brcm,function = <0>; /* in */
 				brcm,pull = <0>; /* none */
 			};

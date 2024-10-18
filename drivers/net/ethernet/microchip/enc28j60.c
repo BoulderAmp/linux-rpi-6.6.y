@@ -9,6 +9,8 @@
  * $Id: enc28j60.c,v 1.22 2007/12/20 10:47:01 claudio Exp $
  */
 
+#define DEBUG 1
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/types.h>
@@ -32,8 +34,12 @@
 
 #define SPI_OPLEN	1
 
-#define ENC28J60_MSG_DEFAULT	\
-	(NETIF_MSG_PROBE | NETIF_MSG_IFUP | NETIF_MSG_IFDOWN | NETIF_MSG_LINK)
+//#define ENC28J60_MSG_DEFAULT                                          \
+//	(NETIF_MSG_PROBE | NETIF_MSG_IFUP | NETIF_MSG_IFDOWN | NETIF_MSG_LINK)
+
+#define ENC28J60_MSG_DEFAULT                    \
+    (NETIF_MSG_PROBE | NETIF_MSG_IFUP | NETIF_MSG_IFDOWN | NETIF_MSG_LINK | \
+     NETIF_MSG_INTR | NETIF_MSG_HW | NETIF_MSG_DRV)
 
 /* Buffer size required for the largest SPI transfer (i.e., reading a
  * frame).
@@ -651,8 +657,8 @@ static int enc28j60_hw_init(struct enc28j60_net *priv)
 	u8 reg;
 
 	if (netif_msg_drv(priv))
-		dev_printk(KERN_DEBUG, dev, "%s() - %s\n", __func__,
-			   priv->full_duplex ? "FullDuplex" : "HalfDuplex");
+        dev_printk(KERN_DEBUG, dev, "%s() - %s\n", __func__,
+                   priv->full_duplex ? "FullDuplex" : "HalfDuplex");
 
 	mutex_lock(&priv->lock);
 	/* first reset the chip */
@@ -734,8 +740,9 @@ static int enc28j60_hw_init(struct enc28j60_net *priv)
 		if (!enc28j60_phy_write(priv, PHCON2, PHCON2_HDLDIS))
 			return 0;
 	}
+    
 	if (netif_msg_hw(priv))
-		enc28j60_dump_regs(priv, "Hw initialized.");
+        enc28j60_dump_regs(priv, "Hw initialized.");
 
 	return 1;
 }
