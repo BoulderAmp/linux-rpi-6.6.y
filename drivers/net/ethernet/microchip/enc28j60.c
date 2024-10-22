@@ -1106,6 +1106,7 @@ static int enc28j60_rx_interrupt(struct net_device *ndev)
 	struct enc28j60_net *priv = netdev_priv(ndev);
 	int pk_counter, ret;
 
+    printk("enc28j60_rx_interrupt!!\n");
 	pk_counter = locked_regb_read(priv, EPKTCNT);
 	if (pk_counter && netif_msg_intr(priv))
 		netdev_printk(KERN_DEBUG, ndev, "intRX, pk_cnt: %d\n",
@@ -1132,7 +1133,8 @@ static irqreturn_t enc28j60_irq(int irq, void *dev_id)
 
 	/* disable further interrupts */
 	locked_reg_bfclr(priv, EIE, EIE_INTIE);
-
+    printk("enc28j60_irq!\n");
+    
 	do {
 		loop = 0;
 		intflags = locked_regb_read(priv, EIR);
